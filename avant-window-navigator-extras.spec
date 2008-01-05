@@ -1,41 +1,40 @@
 #
 # TODO:
-# - check BRs ans Rs (I think they're too much as of now)
+# - update files
 # - separate applets and plugins into subpackages
-# - install and check plugins
 # - make applets subpackage suggest all the applets
 #
-%define snap 20071024
 Summary:	Extra applets and plugins for awn
 Summary(pl.UTF-8):	Dodatkowe applety i wtyczki dla awn
 Name:		avant-window-navigator-extras
-Version:	0.2.%{snap}
+Version:	0.2.1
 Release:	0.1
-License:	GPLv2
+License:	GPL v2+
 Group:		X11/Applications
-#Source0:	http://avant-window-navigator.googlecode.com/files/%{name}-%{version}-2.tar.gz
-Source0:	awn-extras-%{snap}.tar.bz2
-# Source0-md5:	e27eba8b4aa03ff44c82f1975b1170a6
+Source0:	https://launchpad.net/awn-extras/0.2/%{version}/+download/awn-extras-applets-%{version}.tar
+# Source0-md5:	b221bd7b83beb23772dd8f4257221c89
 URL:		https://launchpad.net/awn-extras/
 BuildRequires:	GConf2-devel >= 2.14.0
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
-BuildRequires:	avant-window-navigator-devel
+BuildRequires:	avant-window-navigator-devel >= %{version}
+BuildRequires:	dbus-glib-devel >= 0.30
 BuildRequires:	gettext-devel
-BuildRequires:	gnome-common >= 2.12.0
-BuildRequires:	gnome-desktop-devel
+BuildRequires:	gnome-desktop-devel >= 2.0
 BuildRequires:	gnome-doc-utils >= 0.7.1
+BuildRequires:	gnome-menu-devel
 BuildRequires:	gtk+2-devel >= 2:2.10.0
 BuildRequires:	intltool >= 0.35
-BuildRequires:  libsexy-devel
 BuildRequires:	libglade2-devel >= 1:2.6.0
-BuildRequires:	libgtop-devel
-BuildRequires:	librsvg-devel
+BuildRequires:	libgtop-devel >= 2.0
+BuildRequires:	libnotify-devel
+BuildRequires:	librsvg-devel >= 2.0
+BuildRequires:  libsexy-devel
 BuildRequires:	libtool
-BuildRequires:	libwnck-devel
+BuildRequires:	libwnck-devel >= 2.0
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.197
-#Requires(post,preun):	GConf2 >= 2.14.0
+Requires(post,preun):	GConf2 >= 2.14.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		awn_appletsdir	%{_libdir}/awn/applets
@@ -71,11 +70,9 @@ Pluggins for awn.
 Wtyczki dla awn.
 
 %prep
-%setup -q -n awn-extras-%{snap}
+%setup -q -n awn-extras-applets-%{version}
 
 %build
-# awn-applets core
-cd awn-applets/awn-core-applets
 %{__intltoolize}
 %{__libtoolize}
 %{__aclocal}
@@ -89,35 +86,40 @@ cd awn-applets/awn-core-applets
 %install
 rm -rf $RPM_BUILD_ROOT
 
-# awn-applets core
-%{__make} -C awn-applets/awn-core-applets install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
-
-# awn-plugins
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-#%%post
-#%%gconf_schema_install %{name}.schemas
+%post
+%gconf_schema_install switcher.schemas
+%gconf_schema_install awnsystemmonitor.schemas
+%gconf_schema_install filebrowser.schemas
+%gconf_schema_install notification-daemon.schemas
+%gconf_schema_install trash.schemas
 
-#%%preun
-#%%gconf_schema_uninstall switcher.schemas trash.schemas
+%preun
+%gconf_schema_uninstall switcher.schemas
+%gconf_schema_uninstall awnsystemmonitor.schemas
+%gconf_schema_uninstall filebrowser.schemas
+%gconf_schema_uninstall notification-daemon.schemas
+%gconf_schema_uninstall trash.schemas
 
 %files -n avant-window-navigator-core-applets
 %defattr(644,root,root,755)
-#%{_sysconfdir}/gconf/schemas/*.schemas
 %dir %{_datadir}/awn-core-applets
 
 %dir %{awn_appletsdir}/awnnotificationdaemon
 %attr(755,root,root) %{awn_appletsdir}/awnnotificationdaemon/awnnotificationdaemon.so
 %{awn_appletsdir}/awnnotificationdaemon.desktop
+%{_sysconfdir}/gconf/schemas/notification-daemon.schemas
 %{_datadir}/dbus-1/services/org.freedesktop.Notifications.service
 
 %dir %{awn_appletsdir}/awnsystemmonitor
 %attr(755,root,root) %{awn_appletsdir}/awnsystemmonitor/awnsystemmonitor.so
 %{awn_appletsdir}/awn-system-monitor.desktop
+%{_sysconfdir}/gconf/schemas/awnsystemmonitor.schemas
 
 %{awn_appletsdir}/battery-applet
 %{awn_appletsdir}/battery-applet.desktop
@@ -133,6 +135,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{awn_appletsdir}/filebrowser/filebrowser.so
 %{awn_appletsdir}/filebrowser.desktop
 %{_datadir}/awn-core-applets/filebrowser.svg
+%{_sysconfdir}/gconf/schemas/filebrowser.schemas
 
 %{awn_appletsdir}/gmail
 %{awn_appletsdir}/awngmail.desktop
@@ -168,11 +171,13 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{awn_appletsdir}/switcher
 %attr(755,root,root) %{awn_appletsdir}/switcher/switcher.so
 %{awn_appletsdir}/switcher.desktop
+%{_sysconfdir}/gconf/schemas/switcher.schemas
 
 %dir %{awn_appletsdir}/trash
 %{awn_appletsdir}/trash/trashapplet.glade
 %attr(755,root,root) %{awn_appletsdir}/trash/trash.so
 %{awn_appletsdir}/trash.desktop
+%{_sysconfdir}/gconf/schemas/trash.schemas
 
 %{awn_appletsdir}/volume-control
 %{awn_appletsdir}/volume-control.desktop
