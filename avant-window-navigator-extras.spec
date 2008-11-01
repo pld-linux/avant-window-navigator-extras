@@ -7,12 +7,12 @@
 Summary:	Extra applets and plugins for awn
 Summary(pl.UTF-8):	Dodatkowe applety i wtyczki dla awn
 Name:		avant-window-navigator-extras
-Version:	0.2.1
+Version:	0.2.6
 Release:	0.1
 License:	GPL v2+
 Group:		X11/Applications
-Source0:	https://launchpad.net/awn-extras/0.2/%{version}/+download/awn-extras-applets-%{version}.tar
-# Source0-md5:	b221bd7b83beb23772dd8f4257221c89
+Source0:	https://launchpad.net/awn-extras/0.2/%{version}/+download/awn-extras-applets-%{version}.tar.gz
+# Source0-md5:	a02a7d82f086db96bca35d7865d2fa03
 URL:		https://launchpad.net/awn-extras/
 BuildRequires:	GConf2-devel >= 2.14.0
 BuildRequires:	autoconf >= 2.53
