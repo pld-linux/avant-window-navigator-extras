@@ -33,8 +33,10 @@ BuildRequires:  libsexy-devel
 BuildRequires:	libtool
 BuildRequires:	libwnck-devel >= 2.0
 BuildRequires:	pkgconfig
+BuildRequires:	python-pyalsa
 BuildRequires:	rpmbuild(macros) >= 1.197
 Requires(post,preun):	GConf2 >= 2.14.0
+Requires:	python-pyalsa
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		awn_appletsdir	%{_libdir}/awn/applets
