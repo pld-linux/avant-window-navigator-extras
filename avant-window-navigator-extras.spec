@@ -22,7 +22,7 @@ BuildRequires:	dbus-glib-devel >= 0.30
 BuildRequires:	gettext-devel
 BuildRequires:	gnome-desktop-devel >= 2.0
 BuildRequires:	gnome-doc-utils >= 0.7.1
-BuildRequires:	gnome-menu-devel
+BuildRequires:	gnome-menus-devel
 BuildRequires:	gtk+2-devel >= 2:2.10.0
 BuildRequires:	intltool >= 0.35
 BuildRequires:	libglade2-devel >= 1:2.6.0
