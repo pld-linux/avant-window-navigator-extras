@@ -19,7 +19,7 @@ BuildRequires:	autoconf >= 2.53
 BuildRequires:	automake
 BuildRequires:	avant-window-navigator-devel >= %{version}
 BuildRequires:	dbus-glib-devel >= 0.30
-BuildRequires:	gettext-devel
+BuildRequires:	gettext-tools
 BuildRequires:	gnome-desktop-devel >= 2.0
 BuildRequires:	gnome-doc-utils >= 0.7.1
 BuildRequires:	gnome-menus-devel
